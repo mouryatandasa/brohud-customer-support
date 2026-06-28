@@ -1,0 +1,22 @@
+{
+  "name": "customer-support",
+  "description": "AI customer support agent for Brohud that assists customers with product information, shipping, returns, refunds, sizing, and general support queries.",
+  "instruction": {
+    "$file": "instruction.md"
+  },
+  "toolsets": [
+    "POD"
+  ],
+  "visibility": "POD",
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "folder",
+        "resource_name": "/knowledge",
+        "permission_ids": [
+          "folder.read"
+        ]
+      }
+    ]
+  }
+}
