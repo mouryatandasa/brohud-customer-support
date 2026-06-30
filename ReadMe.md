@@ -19,8 +19,6 @@ https://your-render-url.onrender.com/docs
 
 ### Home Screen
 
-> Replace the image path after adding the screenshot to the repository.
-
 ![Brohud AI Support](docs/home.png)
 
 ---
