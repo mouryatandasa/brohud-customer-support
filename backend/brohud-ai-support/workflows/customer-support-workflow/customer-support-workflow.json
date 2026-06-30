@@ -1,0 +1,59 @@
+{
+  "name": "customer-support-workflow",
+  "description": "Orchestrates customer support requests for Brohud.",
+  "start": {
+    "type": "MANUAL"
+  },
+  "nodes": [
+    {
+      "id": "intake",
+      "type": "FORM",
+      "label": "Customer Input",
+      "config": {
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "message"
+          ]
+        }
+      }
+    },
+    {
+      "id": "customer_support",
+      "type": "AGENT",
+      "label": "Customer Support Agent",
+      "config": {
+        "agent_name": "customer-support",
+        "input_mapping": {
+          "message": {
+            "type": "expression",
+            "value": "intake.message"
+          }
+        }
+      }
+    },
+    {
+      "id": "end",
+      "type": "END",
+      "label": "Response Sent"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge1",
+      "source": "intake",
+      "target": "customer_support"
+    },
+    {
+      "id": "edge2",
+      "source": "customer_support",
+      "target": "end"
+    }
+  ],
+  "visibility": "POD"
+}

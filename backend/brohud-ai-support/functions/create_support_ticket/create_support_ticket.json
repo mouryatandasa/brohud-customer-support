@@ -1,0 +1,12 @@
+{
+  "name": "create_support_ticket",
+  "description": "Creates a customer support ticket for issues that require human assistance.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": []
+  }
+}

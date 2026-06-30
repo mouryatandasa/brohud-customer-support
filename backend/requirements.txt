@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+httpx
+python-dotenv
+pydantic
+pydantic-settings
+lemma-sdk>=0.5.3

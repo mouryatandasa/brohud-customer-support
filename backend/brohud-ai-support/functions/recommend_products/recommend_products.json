@@ -1,0 +1,12 @@
+{
+  "name": "recommend_products",
+  "description": "Recommends products based on customer budget and category.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": []
+  }
+}
