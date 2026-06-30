@@ -1,8 +1,8 @@
 import type { ChatRequest, ChatResponse } from "@/types/chat";
 
-// Base URL from Vite environment variables
-const BASE_URL =
-  import.meta.env.VITE_API_URL || "https://brohud-customer-support.onrender.com";
+const BASE_URL = (
+  import.meta.env.VITE_API_URL || "https://brohud-customer-support.onrender.com"
+).replace(/\/$/, "");
 
 const TIMEOUT_MS = 30_000;
 

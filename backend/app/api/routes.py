@@ -42,6 +42,7 @@ async def health_check():
     summary="Chat Gateway",
     description="Routes client chat messages to the Lemma Workflow and returns AI Support agent responses."
 )
+@router.post("/chat/", response_model=ChatResponse, include_in_schema=False)
 async def chat_gateway(
     request: ChatRequest,
     lemma_service: LemmaService = Depends(get_lemma_service)
