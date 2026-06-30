@@ -2,7 +2,7 @@ import type { ChatRequest, ChatResponse } from "@/types/chat";
 
 // Base URL from Vite environment variables
 const BASE_URL =
-  import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+  import.meta.env.VITE_API_URL || "https://brohud-customer-support.onrender.com";
 
 const TIMEOUT_MS = 30_000;
 
