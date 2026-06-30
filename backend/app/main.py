@@ -9,7 +9,7 @@ from .config.settings import settings
 from .utils.logger import LoggingMiddleware
 
 # Define root logger levels
-logger = logging.getLogger("main")
+logger = logging.getLogger("main")  # reload trigger
 
 # Initialize FastAPI application with custom documentation settings
 app = FastAPI(
