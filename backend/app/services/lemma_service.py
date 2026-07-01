@@ -60,11 +60,11 @@ class LemmaService:
     async def health_check(self) -> bool:
         """
         Validates connectivity and authentication against the Lemma API
-        by executing a simple profile call.
+        by executing a workflows list call on the target pod.
         """
         try:
             logger.info("Conducting Lemma Gateway SDK health check.")
-            await run_in_threadpool(self.client.user.profile)
+            await run_in_threadpool(self.pod.workflows.list)
             logger.info("Lemma Gateway health check succeeded.")
             return True
         except Exception as exc:
@@ -83,10 +83,9 @@ class LemmaService:
         try:
             # 1. Create the workflow run
             run = await run_in_threadpool(
-                self.pod.workflows.create_run,
+                self.pod.workflows.run,
                 self.settings.LEMMA_WORKFLOW_NAME
             )
-            
             # 2. Submit the form to the intake node
             if run.active_wait and run.active_wait.node_id == "intake":
                 run = await run_in_threadpool(
@@ -107,20 +106,20 @@ class LemmaService:
                 )
                 attempts += 1
             
-            # 4. Handle failed/cancelled status
-            if run.status != "COMPLETED":
-                err_msg = run.error or f"Workflow execution failed with status {run.status}"
+            # 4. Handle failed/cancelled status or timeout
+            status = str(run.status)
+            if "COMPLETED" not in status:
+                err_msg = run.error or f"Workflow execution failed or timed out with status {run.status}"
                 raise LemmaGatewayError(err_msg)
             
             # 5. Extract assistant response from run data
             response_text = None
-            run_data = run.to_dict()
             
             # Path A: Check step history
-            step_history = run_data.get("step_history") or []
+            step_history = run.step_history or []
             for step in step_history:
-                if step.get("node_id") == "customer_support" and step.get("output_data"):
-                    data = step["output_data"]
+                if getattr(step, "node_id", None) == "customer_support" and getattr(step, "output_data", None):
+                    data = step.output_data
                     if isinstance(data, dict):
                         response_text = data.get("answer") or data.get("text") or data.get("response") or data.get("output")
                     elif isinstance(data, str):
@@ -129,8 +128,8 @@ class LemmaService:
                         break
 
             # Path B: Check execution context
-            if not response_text:
-                ctx = run_data.get("execution_context") or {}
+            if not response_text and run.execution_context:
+                ctx = getattr(run.execution_context, "additional_properties", {}) or {}
                 for node_id, data in ctx.items():
                     if node_id == "customer_support" and data:
                         if isinstance(data, dict):
@@ -141,8 +140,8 @@ class LemmaService:
                             break
 
             # Path C: Fallback search of any key in execution context
-            if not response_text:
-                ctx = run_data.get("execution_context") or {}
+            if not response_text and run.execution_context:
+                ctx = getattr(run.execution_context, "additional_properties", {}) or {}
                 for node_id, data in ctx.items():
                     if isinstance(data, dict):
                         response_text = data.get("answer") or data.get("text") or data.get("response") or data.get("output")
