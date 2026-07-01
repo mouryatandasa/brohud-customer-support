@@ -10,12 +10,12 @@ The project combines a modern React frontend with a FastAPI gateway and a Lemma 
 
 Frontend
 
-https://your-vercel-url.vercel.app
+[https://your-vercel-url.vercel.app](https://brohud-customer-support-3wngt7oft-actx.vercel.app/)
 
 Backend API
 
-https://your-render-url.onrender.com/docs
-## Preview
+[https://your-render-url.onrender.com/docs
+](https://brohud-customer-support.onrender.com/docs)
 
 ### Home Screen
 
