@@ -51,10 +51,18 @@ class LemmaService:
         self.settings = settings
         logger.info("Initializing Lemma SDK client.")
 
-        self.client = Lemma(
-            token=settings.LEMMA_API_KEY,
-            base_url=settings.LEMMA_API_URL
-        )
+        # Build SDK client kwargs — omit token to let SDK use CLI session auth
+        client_kwargs = {
+            "base_url": settings.LEMMA_API_URL,
+            "pod_id": settings.LEMMA_POD_ID,
+        }
+        if settings.LEMMA_API_KEY:
+            client_kwargs["token"] = settings.LEMMA_API_KEY
+            logger.info("Using explicit LEMMA_API_KEY for authentication.")
+        else:
+            logger.info("No LEMMA_API_KEY set — using Lemma CLI session auth.")
+
+        self.client = Lemma(**client_kwargs)
         self.pod = self.client.pod(settings.LEMMA_POD_ID)
 
     async def health_check(self) -> bool:

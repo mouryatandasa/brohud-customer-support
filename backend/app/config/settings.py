@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     )
 
     LEMMA_API_URL: str = Field(default="https://api.lemma.work", description="Lemma Cloud API Endpoint")
-    LEMMA_API_KEY: str = Field(..., description="API key to authenticate against Lemma API")
+    LEMMA_API_KEY: str = Field(default="", description="API key to authenticate against Lemma API. If empty, falls back to CLI session auth.")
     LEMMA_POD_ID: str = Field(..., description="Target Lemma pod ID containing agent resources")
     LEMMA_AGENT_NAME: str = Field(default="customer-support-workflow", description="Target Lemma agent/workflow base name")
 
