@@ -60,7 +60,7 @@ class LemmaService:
             "pod_id": settings.LEMMA_POD_ID,
         }
         if settings.LEMMA_API_KEY:
-            token = settings.LEMMA_API_KEY.strip()
+            token = settings.LEMMA_API_KEY.strip().strip('"').strip("'")
             headers = {"Authorization": f"Bearer {token}"}
             logger.info(f"Header preview: {repr(headers['Authorization'])}")
             client_kwargs["token"] = token
