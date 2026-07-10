@@ -17,6 +17,9 @@ from lemma_sdk.errors import (
 
 from ..config.settings import Settings
 
+# Enable HTTP client logging to inspect upstream requests
+logging.getLogger("httpx").setLevel(logging.DEBUG)
+logging.getLogger("urllib3").setLevel(logging.DEBUG)
 logger = logging.getLogger("lemma_integration")
 
 # Custom Exceptions for clean routing error mapping
@@ -57,7 +60,10 @@ class LemmaService:
             "pod_id": settings.LEMMA_POD_ID,
         }
         if settings.LEMMA_API_KEY:
-            client_kwargs["token"] = settings.LEMMA_API_KEY
+            token = settings.LEMMA_API_KEY.strip()
+            headers = {"Authorization": f"Bearer {token}"}
+            logger.info(f"Header preview: {repr(headers['Authorization'])}")
+            client_kwargs["token"] = token
             logger.info("Using explicit LEMMA_API_KEY for authentication.")
         else:
             logger.info("No LEMMA_API_KEY set — using Lemma CLI session auth.")
